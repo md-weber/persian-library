@@ -73,14 +73,29 @@
 
             <div>
               <label class="block text-sm font-medium text-gray-700"
-                >Cover Image URL</label
+                >Cover Image</label
               >
-              <input
-                v-model="newBook.coverImage"
-                type="url"
-                required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
+              <div class="mt-1 flex items-center space-x-4">
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp"
+                  @change="handleImageUpload"
+                  class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                />
+                <div
+                  v-if="uploadProgress > 0 && uploadProgress < 100"
+                  class="text-sm text-gray-500"
+                >
+                  Uploading: {{ uploadProgress }}%
+                </div>
+                <div v-if="newBook.coverImage" class="h-20 w-20">
+                  <img
+                    :src="newBook.coverImage"
+                    alt="Preview"
+                    class="h-full w-full object-cover rounded-md"
+                  />
+                </div>
+              </div>
             </div>
 
             <div class="md:col-span-2">
@@ -178,7 +193,13 @@ import {
   doc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "@/repositories/firebase";
+import {
+  ref as storageRef,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { db, storage } from "@/repositories/firebase";
 
 const books = ref([]);
 const newBook = ref({
@@ -203,6 +224,64 @@ onMounted(() => {
 
   return () => unsubscribe();
 });
+
+const uploadProgress = ref(0);
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+// Add image upload handler
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Check file type
+  if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+    alert("Please upload only JPG, PNG or WebP images.");
+    event.target.value = ""; // Reset file input
+    return;
+  }
+
+  // Check file size
+  if (file.size > MAX_FILE_SIZE) {
+    alert("File size must be less than 2MB.");
+    event.target.value = ""; // Reset file input
+    return;
+  }
+
+  try {
+    // Create a unique filename
+    const fileExtension = file.name.split(".").pop();
+    const filename = `covers/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
+    const fileRef = storageRef(storage, filename);
+
+    // Upload file with progress monitoring
+    const uploadTask = uploadBytesResumable(fileRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Handle progress
+        uploadProgress.value = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+        );
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.error("Upload failed:", error);
+        alert("Failed to upload image. Please try again.");
+      },
+      async () => {
+        // Handle successful upload
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        newBook.value.coverImage = downloadURL;
+        uploadProgress.value = 0;
+      },
+    );
+  } catch (error) {
+    console.error("Error handling image upload:", error);
+    alert("Failed to handle image upload. Please try again.");
+  }
+};
 
 // Add new book
 const handleSubmit = async () => {
@@ -233,10 +312,19 @@ const handleSubmit = async () => {
 };
 
 // Delete book
-const deleteBook = async (bookId) => {
+const deleteBook = async (book) => {
   if (confirm("Are you sure you want to delete this book?")) {
     try {
-      await deleteDoc(doc(db, "books", bookId));
+      // Delete the image from Storage if it exists
+      if (book.coverImage) {
+        const imageRef = storageRef(storage, book.coverImage);
+        await deleteObject(imageRef).catch((error) => {
+          console.log("Error deleting image:", error);
+        });
+      }
+
+      // Delete the book document
+      await deleteDoc(doc(db, "books", book.id));
       alert("Book deleted successfully!");
     } catch (error) {
       console.error("Error deleting book:", error);
