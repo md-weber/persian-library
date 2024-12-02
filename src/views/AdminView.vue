@@ -1,12 +1,9 @@
 <template>
-  <div class="min-h-screen bg-gray-50 text-black">
+  <BaseLayout>
     <header class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center">
           <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <router-link to="/" class="text-indigo-600 hover:text-indigo-800">
-            Back to Library
-          </router-link>
         </div>
       </div>
     </header>
@@ -155,6 +152,7 @@
                 >
                   Delete
                 </button>
+                -
                 <button
                   @click="editBook(book)"
                   class="text-indigo-600 hover:text-indigo-800"
@@ -167,10 +165,11 @@
         </table>
       </div>
     </main>
-  </div>
+  </BaseLayout>
 </template>
 
 <script setup>
+import BaseLayout from "@/components/BaseLayout.vue";
 import { ref, onMounted } from "vue";
 import {
   collection,

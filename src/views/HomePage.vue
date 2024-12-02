@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <BaseLayout>
     <!-- Header -->
     <header class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -57,6 +57,7 @@
       >
         <div
           v-for="book in filteredBooks"
+          seLa
           :key="book.id"
           class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg duration-300 hover:scale-105 transition-transform"
         >
@@ -117,10 +118,11 @@
         <p class="text-gray-500">No books found matching your search.</p>
       </div>
     </main>
-  </div>
+  </BaseLayout>
 </template>
 
 <script setup>
+import BaseLayout from "@/components/BaseLayout.vue";
 import { ref, computed, onMounted } from "vue";
 import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
