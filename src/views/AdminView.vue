@@ -162,7 +162,7 @@
               </td>
               <td class="px-6 py-4">
                 <button
-                  @click="deleteBook(book.id)"
+                  @click="deleteBook(book)"
                   class="text-red-600 hover:text-red-800 mr-2"
                 >
                   Delete
