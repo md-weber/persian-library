@@ -1,8 +1,17 @@
 <template>
-  <div dir="rtl" class="font-[Vazir]">
-    <nav dir="rtl" class="bg-white shadow-sm">
+  <div class="font-[Vazir]">
+    <nav class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
+          <!-- Language switcher -->
+          <select
+            v-model="currentLocale"
+            @change="changeLanguage"
+            class="rounded-md border-gray-300 text-black"
+          >
+            <option value="fa">فارسی</option>
+            <option value="en">English</option>
+          </select>
           <RouterLink to="/" class="text-indigo-600 hover:text-indigo-800">
             Home
           </RouterLink>
@@ -42,9 +51,21 @@
 <script setup>
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t, locale } = useI18n();
+const currentLocale = ref(locale.value);
 const authStore = useAuthStore();
 const router = useRouter();
+
+const changeLanguage = () => {
+  locale.value = currentLocale.value;
+  localStorage.setItem("userLocale", currentLocale.value);
+  document.documentElement.dir = currentLocale.value === "fa" ? "rtl" : "ltr";
+};
+
+document.documentElement.dir = currentLocale.value === "fa" ? "rtl" : "ltr";
 
 const handleLogout = async () => {
   try {

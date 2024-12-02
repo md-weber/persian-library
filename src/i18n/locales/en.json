@@ -1,0 +1,31 @@
+{
+  "admin": {
+    "title": "Admin Dashboard",
+    "addBook": {
+      "title": "Add New Book",
+      "form": {
+        "title": "Title",
+        "author": "Author",
+        "translator": "Translator",
+        "illustrator": "Illustrator",
+        "ageGroup": "Age Group",
+        "coverImage": "Cover Image",
+        "description": "Description",
+        "submit": "Add Book"
+      }
+    },
+    "manageBooks": {
+      "title": "Manage Books",
+      "table": {
+        "title": "Title",
+        "author": "Author",
+        "status": "Status",
+        "actions": "Actions",
+        "available": "Available",
+        "borrowed": "Borrowed",
+        "delete": "Delete",
+        "edit": "Edit"
+      }
+    }
+  }
+}

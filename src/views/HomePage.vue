@@ -19,7 +19,6 @@
             v-model="searchQuery"
             placeholder="جستجو در همه موارد..."
             class="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-black"
-            dir="rtl"
           />
           <div
             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -40,7 +39,7 @@
           </div>
         </div>
         <!-- Search Results Count -->
-        <p class="mt-2 text-sm text-gray-600" dir="rtl">
+        <p class="mt-2 text-sm text-gray-600">
           نمایش {{ filteredBooks.length }} از {{ books.length }} کتاب
         </p>
       </div>

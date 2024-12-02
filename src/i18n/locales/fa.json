@@ -1,0 +1,31 @@
+{
+  "admin": {
+    "title": "پنل مدیریت",
+    "addBook": {
+      "title": "افزودن کتاب جدید",
+      "form": {
+        "title": "عنوان",
+        "author": "نویسنده",
+        "translator": "مترجم",
+        "illustrator": "تصویرگر",
+        "ageGroup": "گروه سنی",
+        "coverImage": "تصویر جلد",
+        "description": "توضیحات",
+        "submit": "افزودن کتاب"
+      }
+    },
+    "manageBooks": {
+      "title": "مدیریت کتاب‌ها",
+      "table": {
+        "title": "عنوان",
+        "author": "نویسنده",
+        "status": "وضعیت",
+        "actions": "عملیات",
+        "available": "موجود",
+        "borrowed": "امانت داده شده",
+        "delete": "حذف",
+        "edit": "ویرایش"
+      }
+    }
+  }
+}
