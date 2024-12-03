@@ -10,9 +10,9 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-8">
+    <main class="max-w-7xl mx-auto py-4">
       <!-- Search Input -->
-      <div class="mb-6">
+      <div class="mb-4 bg-white px-4 py-4 rounded-lg">
         <div class="relative">
           <input
             type="text"
@@ -48,6 +48,12 @@
           }}
         </p>
       </div>
+
+      <!-- Quick Filters -->
+      <QuickFilters
+        :books="books"
+        @update:filtered-books="handleFilteredBooks"
+      />
 
       <!-- Error message display -->
       <div v-if="error" class="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
@@ -146,26 +152,28 @@ import BaseLayout from "@/components/BaseLayout.vue";
 import { ref, computed, onMounted } from "vue";
 import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
+import QuickFilters from "@/components/QuickFilters.vue";
 
 const books = ref([]);
 const error = ref(null);
 const searchQuery = ref("");
+const displayedBooks = ref([]);
 
 // Helper function to check if a value is a string and contains the search query
 const matchesSearch = (value, query) => {
   return typeof value === "string" && value.toLowerCase().includes(query);
 };
 
-// Computed property for filtered books
+// Update the filteredBooks computed property
 const filteredBooks = computed(() => {
   const query = searchQuery.value.toLowerCase().trim();
+  const booksToFilter =
+    displayedBooks.value.length > 0 ? displayedBooks.value : books.value;
 
-  if (!query) return books.value;
+  if (!query) return booksToFilter;
 
-  return books.value.filter((book) => {
-    // Search through all properties of the book
+  return booksToFilter.filter((book) => {
     return Object.values(book).some((value) => {
-      // If the value is a string, search in it
       if (typeof value === "string") {
         return value.toLowerCase().includes(query);
       }
@@ -173,6 +181,11 @@ const filteredBooks = computed(() => {
     });
   });
 });
+
+// Handle filtered books from QuickFilters
+const handleFilteredBooks = (filtered) => {
+  displayedBooks.value = filtered;
+};
 
 onMounted(() => {
   try {

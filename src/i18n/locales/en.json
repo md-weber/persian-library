@@ -1,4 +1,13 @@
 {
+  "filters": {
+    "availability": "Availability",
+    "all": "All",
+    "available": "Available",
+    "borrowed": "Borrowed",
+    "ageGroup": "Age Group",
+    "newArrivals": "New Arrivals",
+    "reset": "Reset Filters"
+  },
   "app": {
     "title": "Persian Book Library",
     "loading": "Loading..."
