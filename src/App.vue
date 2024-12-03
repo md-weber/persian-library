@@ -13,7 +13,7 @@
             <option value="en">English</option>
           </select>
           <RouterLink to="/" class="text-indigo-600 hover:text-indigo-800">
-            Home
+            {{ $t("routes.home") }}
           </RouterLink>
           <div>
             <RouterLink
@@ -21,21 +21,21 @@
               to="/admin"
               class="text-indigo-600 hover:text-indigo-800 mr-4"
             >
-              Admin Dashboard
+              {{ $t("routes.adminDashboard") }}
             </RouterLink>
             <button
               v-if="authStore.isAuthenticated()"
               @click="handleLogout"
               class="text-red-600 hover:text-red-800"
             >
-              Logout
+              {{ $t("routes.logout") }}
             </button>
             <RouterLink
               v-else
               to="/login"
               class="text-indigo-600 hover:text-indigo-800"
             >
-              Login
+              {{ $t("routes.login") }}
             </RouterLink>
           </div>
         </div>
@@ -43,7 +43,7 @@
     </nav>
     <RouterView v-if="!authStore.loading" />
     <div v-else class="flex justify-center items-center min-h-screen">
-      Loading...
+      {{ $t("app.loading") }}
     </div>
   </div>
 </template>
@@ -54,7 +54,7 @@ import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 const currentLocale = ref(locale.value);
 const authStore = useAuthStore();
 const router = useRouter();

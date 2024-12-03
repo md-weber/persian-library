@@ -2,22 +2,22 @@
   <BaseLayout>
     <!-- Header -->
     <header class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto py-4">
         <h1 class="text-3xl font-bold text-gray-900 text-center">
-          Persian Book Library
+          {{ $t("app.title") }}
         </h1>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="max-w-7xl mx-auto py-8">
       <!-- Search Input -->
       <div class="mb-6">
         <div class="relative">
           <input
             type="text"
             v-model="searchQuery"
-            placeholder="جستجو در همه موارد..."
+            :placeholder="$t('home.searchPlaceholder')"
             class="w-full px-4 py-2 pl-10 pr-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-black"
           />
           <div
@@ -40,7 +40,12 @@
         </div>
         <!-- Search Results Count -->
         <p class="mt-2 text-sm text-gray-600">
-          نمایش {{ filteredBooks.length }} از {{ books.length }} کتاب
+          {{
+            $t("home.booksCount", {
+              filtered: filteredBooks.length,
+              total: books.length,
+            })
+          }}
         </p>
       </div>
 
@@ -58,7 +63,7 @@
           v-for="book in filteredBooks"
           seLa
           :key="book.id"
-          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg duration-300 hover:scale-105 transition-transform"
+          class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg duration-300 hover:scale-105 transition-transform flex flex-col"
         >
           <!-- Book Cover Image -->
           <div class="aspect-w-4 aspect-h-3 w-full">
@@ -70,42 +75,56 @@
           </div>
 
           <!-- Book Information -->
-          <div class="p-4">
-            <div class="p-4 text-right">
+          <div class="p-4 flex flex-col flex-grow">
+            <div class="p-4 text-right flex-grow">
               <!-- Align text to right for Persian -->
               <h3 class="text-lg font-semibold text-gray-900">
                 {{ book.title }}
               </h3>
               <p class="text-sm text-gray-600">نویسنده: {{ book.author }}</p>
               <p v-if="book.translator" class="text-sm text-gray-600">
-                مترجم: {{ book.translator }}
+                {{
+                  $t("home.bookTranslatorLabel", {
+                    translator: book.translator,
+                  })
+                }}
               </p>
               <p v-if="book.illustrator" class="text-sm text-gray-600">
-                تصویرگر: {{ book.illustrator }}
+                {{
+                  $t("home.bookIllustratorLabel", {
+                    illustrator: book.illustrator,
+                  })
+                }}
               </p>
               <p v-if="book.age" class="text-sm text-gray-600">
-                رده سنی: {{ book.age }}
+                {{ $t("home.bookAgeLabel", { age: book.age }) }}
               </p>
               <p class="text-sm text-gray-600 mt-2">{{ book.description }}</p>
             </div>
             <!-- Availability Status -->
-            <div class="mt-2 flex items-center">
-              <span
-                class="text-sm"
-                :class="book.isAvailable ? 'text-green-600' : 'text-red-600'"
-              >
-                {{ book.isAvailable ? "Available" : "Currently Borrowed" }}
-              </span>
-            </div>
+            <div class="mt-auto">
+              <div class="mt-2 flex items-center">
+                <span
+                  class="text-sm"
+                  :class="book.isAvailable ? 'text-green-600' : 'text-red-600'"
+                >
+                  {{ book.isAvailable ? "Available" : "Currently Borrowed" }}
+                </span>
+              </div>
 
-            <!-- Borrow Button -->
-            <button
-              @click="borrowBook(book)"
-              :disabled="!book.isAvailable"
-              class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed text-white bg-indigo-600 hover:bg-indigo-700"
-            >
-              {{ book.isAvailable ? "Borrow Book" : "Not Available" }}
-            </button>
+              <!-- Borrow Button -->
+              <button
+                @click="borrowBook(book)"
+                :disabled="!book.isAvailable"
+                class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed text-white bg-indigo-600 hover:bg-indigo-700"
+              >
+                {{
+                  book.isAvailable
+                    ? $t("home.borrowBook")
+                    : $t("home.notAvailable")
+                }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -114,13 +133,15 @@
         v-if="filteredBooks.length === 0 && !error"
         class="text-center py-10"
       >
-        <p class="text-gray-500">No books found matching your search.</p>
+        <p class="text-gray-500">{{ $t("home.noBooksFound") }}</p>
       </div>
     </main>
   </BaseLayout>
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 import BaseLayout from "@/components/BaseLayout.vue";
 import { ref, computed, onMounted } from "vue";
 import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
@@ -179,7 +200,7 @@ onMounted(() => {
 });
 
 const borrowBook = async (book) => {
-  const borrowerName = prompt("Please enter your name:");
+  const borrowerName = prompt(t("home.enterYourNamePrompt"));
   if (borrowerName) {
     try {
       const bookRef = doc(db, "books", book.id);
@@ -190,7 +211,7 @@ const borrowBook = async (book) => {
       });
     } catch (error) {
       console.error("Error updating book:", error);
-      alert("Failed to borrow book. Please try again.");
+      alert(t("home.messages.failed"));
     }
   }
 };

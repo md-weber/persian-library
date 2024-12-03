@@ -1,6 +1,35 @@
 {
+  "app": {
+    "title": "کتابخانه فارسی",
+    "loading": "در حال بارگذاری..."
+  },
+  "home": {
+    "messages": {
+      "failed": "امانت گرفتن کتاب با خطا مواجه شد. لطفا دوباره تلاش کنید."
+    },
+    "searchPlaceholder": "جستجو...",
+    "booksCount": "نمایش {filtered} از {total} کتاب",
+    "bookTranslatorLabel": "مترجم: {translator}",
+    "bookIllustratorLabel": "تصویرگر: {illustrator}",
+    "bookAgeLabel": "رده سنی: {age}",
+    "borrowBook": "امانت گرفتن کتاب",
+    "notAvailable": "در دسترس نیست",
+    "noBooksFound": "کتابی با این مشخصات یافت نشد.",
+    "enterYourNamePrompt": "لطفا نام خود را وارد کنید:"
+  },
+  "routes": {
+    "home": "صفحه اصلی",
+    "adminDashboard": "پنل مدیریت",
+    "logout": "خروج",
+    "login": "ورود"
+  },
   "admin": {
     "title": "پنل مدیریت",
+    "uploadImage": {
+      "formatError": "لطفا فقط تصاویر با فرمت JPG، PNG یا WebP آپلود کنید.",
+      "fileSizeError": "حجم فایل باید کمتر از ۲ مگابایت باشد.",
+      "failed": "آپلود تصویر با خطا مواجه شد. لطفا دوباره تلاش کنید."
+    },
     "addBook": {
       "title": "افزودن کتاب جدید",
       "form": {
@@ -11,11 +40,21 @@
         "ageGroup": "گروه سنی",
         "coverImage": "تصویر جلد",
         "description": "توضیحات",
-        "submit": "افزودن کتاب"
+        "submit": "افزودن کتاب",
+        "uploadProgress": "در حال آپلود: {progress} درصد"
+      },
+      "messages": {
+        "success": "کتاب با موفقیت اضافه شد!",
+        "failed": "افزودن کتاب با خطا مواجه شد. لطفا دوباره تلاش کنید."
       }
     },
     "manageBooks": {
       "title": "مدیریت کتاب‌ها",
+      "messages": {
+        "confirmDelete": "آیا از حذف این کتاب اطمینان دارید؟",
+        "success": "کتاب با موفقیت حذف شد!",
+        "failed": "حذف کتاب با خطا مواجه شد. لطفا دوباره تلاش کنید."
+      },
       "table": {
         "title": "عنوان",
         "author": "نویسنده",
@@ -26,6 +65,17 @@
         "delete": "حذف",
         "edit": "ویرایش"
       }
+    },
+    "login": {
+      "title": "ورود مدیر",
+      "emailPlaceholder": "آدرس ایمیل",
+      "emailLabel": "آدرس ایمیل",
+      "passwordLabel": "رمز عبور",
+      "passwordPlaceholder": "رمز عبور",
+      "signInButton": "ورود به سیستم"
     }
+  },
+  "errors": {
+    "invalidEmailOrPassword": "ایمیل یا رمز عبور نامعتبر است"
   }
 }

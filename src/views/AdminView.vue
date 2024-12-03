@@ -3,7 +3,9 @@
     <header class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center">
-          <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+          <h1 class="text-3xl font-bold text-gray-900">
+            {{ $t("admin.title") }}
+          </h1>
         </div>
       </div>
     </header>
@@ -11,13 +13,15 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Add New Book Form -->
       <div class="bg-white rounded-lg shadow p-6 mb-8">
-        <h2 class="text-xl font-semibold mb-4">Add New Book</h2>
+        <h2 class="text-xl font-semibold mb-4">
+          {{ $t("admin.addBook.title") }}
+        </h2>
         <form @submit.prevent="handleSubmit" class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Title</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.title")
+              }}</label>
               <input
                 v-model="newBook.title"
                 type="text"
@@ -27,9 +31,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Author</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.author")
+              }}</label>
               <input
                 v-model="newBook.author"
                 type="text"
@@ -39,9 +43,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Translator</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.translator")
+              }}</label>
               <input
                 v-model="newBook.translator"
                 type="text"
@@ -50,9 +54,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Illustrator</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.illustrator")
+              }}</label>
               <input
                 v-model="newBook.illustrator"
                 type="text"
@@ -61,9 +65,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Age Group</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.ageGroup")
+              }}</label>
               <input
                 v-model="newBook.age"
                 type="text"
@@ -72,9 +76,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Cover Image</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.coverImage")
+              }}</label>
               <div class="mt-1 flex items-center space-x-4">
                 <input
                   type="file"
@@ -86,7 +90,11 @@
                   v-if="uploadProgress > 0 && uploadProgress < 100"
                   class="text-sm text-gray-500"
                 >
-                  Uploading: {{ uploadProgress }}%
+                  {{
+                    $t("admin.addBook.form.uploadProgress", {
+                      progress: uploadProgress,
+                    })
+                  }}
                 </div>
                 <div v-if="newBook.coverImage" class="h-20 w-20">
                   <img
@@ -99,9 +107,9 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700"
-                >Description</label
-              >
+              <label class="block text-sm font-medium text-gray-700">{{
+                $t("admin.addBook.form.description")
+              }}</label>
               <textarea
                 v-model="newBook.description"
                 rows="3"
@@ -115,7 +123,7 @@
               type="submit"
               class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
             >
-              Add Book
+              {{ $t("admin.addBook.form.submit") }}
             </button>
           </div>
         </form>
@@ -123,29 +131,31 @@
 
       <!-- Existing Books Table -->
       <div class="bg-white rounded-lg shadow overflow-hidden">
-        <h2 class="text-xl font-semibold p-6">Manage Books</h2>
+        <h2 class="text-xl font-semibold p-6">
+          {{ $t("admin.manageBooks.title") }}
+        </h2>
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Title
+                {{ $t("admin.manageBooks.table.title") }}
               </th>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Author
+                {{ $t("admin.manageBooks.table.author") }}
               </th>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Status
+                {{ $t("admin.manageBooks.table.status") }}
               </th>
               <th
                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Actions
+                {{ $t("admin.manageBooks.table.actions") }}
               </th>
             </tr>
           </thead>
@@ -157,7 +167,11 @@
                 <span
                   :class="book.isAvailable ? 'text-green-600' : 'text-red-600'"
                 >
-                  {{ book.isAvailable ? "Available" : "Borrowed" }}
+                  {{
+                    book.isAvailable
+                      ? $t("admin.manageBooks.table.available")
+                      : $t("admin.manageBooks.table.borrowed")
+                  }}
                 </span>
               </td>
               <td class="px-6 py-4">
@@ -165,14 +179,14 @@
                   @click="deleteBook(book)"
                   class="text-red-600 hover:text-red-800 mr-2"
                 >
-                  Delete
+                  {{ $t("admin.manageBooks.table.delete") }}
                 </button>
                 -
                 <button
                   @click="editBook(book)"
                   class="text-indigo-600 hover:text-indigo-800"
                 >
-                  Edit
+                  {{ $t("admin.manageBooks.table.edit") }}
                 </button>
               </td>
             </tr>
@@ -184,6 +198,8 @@
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 import BaseLayout from "@/components/BaseLayout.vue";
 import { ref, onMounted } from "vue";
 import {
@@ -236,14 +252,14 @@ const handleImageUpload = async (event) => {
 
   // Check file type
   if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-    alert("Please upload only JPG, PNG or WebP images.");
+    alert(t("admin.uploadImage.formatError"));
     event.target.value = ""; // Reset file input
     return;
   }
 
   // Check file size
   if (file.size > MAX_FILE_SIZE) {
-    alert("File size must be less than 2MB.");
+    alert(t("admin.uploadImage.fileSizeError"));
     event.target.value = ""; // Reset file input
     return;
   }
@@ -268,7 +284,7 @@ const handleImageUpload = async (event) => {
       (error) => {
         // Handle unsuccessful uploads
         console.error("Upload failed:", error);
-        alert("Failed to upload image. Please try again.");
+        alert(t("admin.uploadImage.failed"));
       },
       async () => {
         // Handle successful upload
@@ -279,7 +295,7 @@ const handleImageUpload = async (event) => {
     );
   } catch (error) {
     console.error("Error handling image upload:", error);
-    alert("Failed to handle image upload. Please try again.");
+    alert(t("admin.uploadImage.failed"));
   }
 };
 
@@ -304,16 +320,16 @@ const handleSubmit = async () => {
       isAvailable: true,
     };
 
-    alert("Book added successfully!");
+    alert(t("admin.addBook.messages.success"));
   } catch (error) {
     console.error("Error adding book:", error);
-    alert("Failed to add book. Please try again.");
+    alert(t("admin.addBook.messages.failed"));
   }
 };
 
 // Delete book
 const deleteBook = async (book) => {
-  if (confirm("Are you sure you want to delete this book?")) {
+  if (confirm(t("admin.manageBooks.messages.confirmDelete"))) {
     try {
       // Delete the image from Storage if it exists
       if (book.coverImage) {
@@ -325,10 +341,10 @@ const deleteBook = async (book) => {
 
       // Delete the book document
       await deleteDoc(doc(db, "books", book.id));
-      alert("Book deleted successfully!");
+      alert(t("admin.manageBooks.messages.success"));
     } catch (error) {
       console.error("Error deleting book:", error);
-      alert("Failed to delete book. Please try again.");
+      alert(t("admin.manageBooks.messages.failed"));
     }
   }
 };
