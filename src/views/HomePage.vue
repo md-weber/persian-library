@@ -82,7 +82,7 @@
 
           <!-- Book Information -->
           <div class="p-4 flex flex-col flex-grow">
-            <div class="p-4 text-right flex-grow">
+            <div class="p-4 flex-grow">
               <!-- Align text to right for Persian -->
               <h3 class="text-lg font-semibold text-gray-900">
                 {{ book.title }}
@@ -109,12 +109,16 @@
             </div>
             <!-- Availability Status -->
             <div class="mt-auto">
-              <div class="mt-2 flex items-center">
+              <div class="flex items-center justify-center">
                 <span
                   class="text-sm"
                   :class="book.isAvailable ? 'text-green-600' : 'text-red-600'"
                 >
-                  {{ book.isAvailable ? "Available" : "Currently Borrowed" }}
+                  {{
+                    book.isAvailable
+                      ? $t("home.status.available")
+                      : $t("home.status.currentlyBorrowed")
+                  }}
                 </span>
               </div>
 

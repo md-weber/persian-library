@@ -4,4 +4,9 @@
       <slot></slot>
     </div>
   </div>
+  <BaseFooter />
 </template>
+
+<script setup>
+import BaseFooter from "./BaseFooter.vue";
+</script>
