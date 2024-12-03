@@ -1,4 +1,13 @@
 {
+  "filters": {
+    "availability": "وضعیت موجودی",
+    "all": "همه",
+    "available": "موجود",
+    "borrowed": "امانت داده شده",
+    "ageGroup": "رده سنی",
+    "newArrivals": "تازه‌های کتابخانه",
+    "reset": "حذف فیلترها"
+  },
   "app": {
     "title": "کتابخانه فارسی",
     "loading": "در حال بارگذاری..."
