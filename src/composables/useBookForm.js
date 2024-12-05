@@ -24,7 +24,6 @@ export function useBookForm() {
   });
 
   const uploadProgress = ref(0);
-  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
   const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
   const handleImageUpload = async (event) => {
@@ -34,13 +33,6 @@ export function useBookForm() {
     // Check file type
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       alert(t("admin.uploadImage.formatError"));
-      event.target.value = ""; // Reset file input
-      return;
-    }
-
-    // Check file size
-    if (file.size > MAX_FILE_SIZE) {
-      alert(t("admin.uploadImage.fileSizeError"));
       event.target.value = ""; // Reset file input
       return;
     }
@@ -68,10 +60,22 @@ export function useBookForm() {
           alert(t("admin.uploadImage.failed"));
         },
         async () => {
-          // Handle successful upload
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          newBook.value.coverImage = downloadURL;
-          uploadProgress.value = 0;
+          try {
+            // Wait a moment for the Cloud Function to process the image
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            // Get the URL of the resized image
+            const resizedFileRef = storageRef(
+              storage,
+              `covers/resized_${filename.split("/").pop()}`,
+            );
+            const downloadURL = await getDownloadURL(resizedFileRef);
+            newBook.value.coverImage = downloadURL;
+            uploadProgress.value = 0;
+          } catch (error) {
+            console.error("Error getting resized image URL:", error);
+            alert(t("admin.uploadImage.failed"));
+          }
         },
       );
     } catch (error) {
