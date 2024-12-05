@@ -9,22 +9,22 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: HomePage,
+    component: () => import("../views/HomePage.vue"),
   },
   {
     path: "/login",
     name: "login",
-    component: LoginView,
+    component: () => import("../views/LoginView.vue"),
   },
   {
     path: "/register", // Add this route
     name: "register",
-    component: RegisterView,
+    component: () => import("../views/RegisterView.vue"),
   },
   {
     path: "/admin",
     name: "admin",
-    component: AdminView,
+    component: () => import("../views/AdminView.vue"),
     meta: { requiresAdmin: true },
   },
 ];
