@@ -98,9 +98,10 @@
                 {{ $t("admin.addBook.form.ageGroup") }}
               </label>
               <input
-                v-model="editedBook.age"
+                v-model="ageInput"
                 type="text"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                @input="normalizeAgeInput"
               />
             </div>
 
@@ -165,6 +166,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
 import { useI18n } from "vue-i18n";
 import { useUsers } from "@/composables/useUsers";
+import { convertNumbers, validateAgeInput } from "@/utils/numberConverter";
 
 const { t } = useI18n();
 const { users } = useUsers();
@@ -201,6 +203,21 @@ watch(
     }
   },
 );
+
+watch(
+  () => props.book?.age,
+  (newValue) => {
+    if (newValue) {
+      editedBook.value.age = convertNumbers.toPersian(newValue.toString());
+    }
+  },
+  { immediate: true },
+);
+
+const normalizeAgeInput = () => {
+  const validInput = validateAgeInput(editedBook.value.age);
+  editedBook.value.age = convertNumbers.toPersian(validInput);
+};
 
 const handleSubmit = async () => {
   try {

@@ -78,6 +78,7 @@
 import { ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/stores/authStore";
+import { convertNumbers } from "@/utils/numberConverter";
 
 const { t } = useI18n();
 const authStore = useAuthStore();
@@ -107,8 +108,22 @@ const userBooksCount = computed(() => {
 
 // Computed unique age groups from books
 const ageGroups = computed(() => {
-  const ages = new Set(props.books.map((book) => book.age).filter(Boolean));
-  return Array.from(ages).sort();
+  const ages = new Set(
+    props.books
+      .map((book) => {
+        if (!book.age) return null;
+        // Convert all numbers to Persian
+        return convertNumbers.toPersian(book.age.toString());
+      })
+      .filter(Boolean),
+  );
+
+  // Sort ages properly by converting to English numbers for comparison
+  return Array.from(ages).sort((a, b) => {
+    const aNum = parseInt(convertNumbers.toEnglish(a));
+    const bNum = parseInt(convertNumbers.toEnglish(b));
+    return aNum - bNum;
+  });
 });
 
 // Filter functions
@@ -131,7 +146,11 @@ const applyFilters = () => {
 
   // Age group filter
   if (selectedAgeGroup.value !== "all") {
-    filtered = filtered.filter((book) => book.age === selectedAgeGroup.value);
+    filtered = filtered.filter((book) => {
+      if (!book.age) return false;
+      const normalizedBookAge = convertNumbers.toPersian(book.age.toString());
+      return normalizedBookAge === selectedAgeGroup.value;
+    });
   }
 
   // New arrivals filter (books added in the last 30 days)
@@ -192,4 +211,10 @@ watch(
     applyFilters();
   },
 );
+
+watch(selectedAgeGroup, (newValue) => {
+  if (newValue !== "all") {
+    selectedAgeGroup.value = convertNumbers.toPersian(newValue);
+  }
+});
 </script>

@@ -70,9 +70,10 @@
             $t("admin.addBook.form.ageGroup")
           }}</label>
           <input
-            v-model="newBook.age"
+            v-model="ageInput"
             type="text"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            @input="normalizeAgeInput"
           />
         </div>
 
@@ -140,9 +141,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useBookForm } from "@/composables/useBookForm";
 import { useUsers } from "@/composables/useUsers";
+import { convertNumbers, validateAgeInput } from "@/utils/numberConverter";
+
+const ageInput = ref("");
+
+const normalizeAgeInput = () => {
+  const validInput = validateAgeInput(ageInput.value);
+  ageInput.value = convertNumbers.toPersian(validInput);
+  newBook.value.age = ageInput.value;
+};
 
 const {
   newBook,
