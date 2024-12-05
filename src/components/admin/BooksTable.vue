@@ -75,12 +75,22 @@
         </tr>
       </tbody>
     </table>
+    <EditBookModal
+      :show="showEditModal"
+      :book="selectedBook"
+      @close="closeEditModal"
+      @update:book="handleBookUpdate"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useUsers } from "@/composables/useUsers";
+import EditBookModal from "./EditBookModal.vue";
+
+const showEditModal = ref(false);
+const selectedBook = ref(null);
 
 const props = defineProps({
   books: {
@@ -88,6 +98,8 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(["delete-book", "update-book"]);
 
 const { users } = useUsers();
 
@@ -99,5 +111,17 @@ const booksWithUsers = computed(() => {
   }));
 });
 
-defineEmits(["delete-book", "edit-book"]);
+const editBook = (book) => {
+  selectedBook.value = { ...book };
+  showEditModal.value = true;
+};
+
+const closeEditModal = () => {
+  showEditModal.value = false;
+  selectedBook.value = null;
+};
+
+const handleBookUpdate = (updatedBook) => {
+  emit("update-book", updatedBook);
+};
 </script>

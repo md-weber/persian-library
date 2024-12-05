@@ -29,14 +29,17 @@ export function useBooks() {
     }
   };
 
-  const editBook = (book) => {
-    // You could implement this by showing a modal or navigating to an edit page
-    console.log("Edit book:", book);
+  const handleBookUpdate = (updatedBook) => {
+    // The books list should automatically update through the Firestore listener
+    // But you could also update the local state if needed
+    books.value = books.value.map((book) =>
+      book.id === updatedBook.id ? updatedBook : book,
+    );
   };
 
   return {
     books,
     deleteBook,
-    editBook,
+    handleBookUpdate,
   };
 }

@@ -64,6 +64,10 @@
         "failed": "Failed to add book. Please try again."
       }
     },
+    "editBook": {
+      "title": "Edit Book",
+      "error": "Failed to update book. Please try again."
+    },
     "manageBooks": {
       "title": "Manage Books",
       "messages": {
@@ -119,5 +123,9 @@
       "fairUse": "This application is only intented to be used from a private Farsi group, therefore no impressum and data-privacy information is needed."
     },
     "copyright": "© {year} Persian Children's Library. All rights reserved."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }

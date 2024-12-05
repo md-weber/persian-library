@@ -6,7 +6,7 @@
       <BooksTable
         :books="books"
         @delete-book="deleteBook"
-        @edit-book="editBook"
+        @update-book="handleBookUpdate"
       />
     </main>
   </BaseLayout>
@@ -22,7 +22,7 @@ import AddBookForm from "@/components/admin/AddBookForm.vue";
 import BooksTable from "@/components/admin/BooksTable.vue";
 import { useBooks } from "@/composables/useBooks";
 
-const { books, deleteBook, editBook } = useBooks();
+const { books, deleteBook, handleBookUpdate } = useBooks();
 
 onMounted(() => {
   const unsubscribe = onSnapshot(collection(db, "books"), (snapshot) => {
