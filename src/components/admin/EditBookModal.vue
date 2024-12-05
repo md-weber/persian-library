@@ -182,9 +182,11 @@ import { useI18n } from "vue-i18n";
 import { useUsers } from "@/composables/useUsers";
 import { useBookForm } from "@/composables/useBookForm";
 import { convertNumbers, validateAgeInput } from "@/utils/numberConverter";
+import { useNotification } from "@/composables/useNotification";
 
 const { t } = useI18n();
 const { users } = useUsers();
+const { notify } = useNotification();
 
 const props = defineProps({
   show: Boolean,
@@ -239,7 +241,7 @@ const normalizeAgeInput = () => {
 
 const handleSubmit = async () => {
   if (isUploading.value) {
-    alert(t("admin.editBook.waitForUpload"));
+    notify.info(t("admin.editBook.waitForUpload"));
     return;
   }
 
@@ -254,7 +256,7 @@ const handleSubmit = async () => {
     emit("close");
   } catch (error) {
     console.error("Error updating book:", error);
-    alert(t("admin.editBook.error"));
+    notify.error(t("admin.editBook.error"));
   } finally {
     isUpdating.value = false;
   }

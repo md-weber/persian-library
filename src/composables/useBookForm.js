@@ -7,11 +7,14 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { useNotification } from "@/composables/useNotification";
 
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export function useBookForm(initialBook = null) {
   const { t } = useI18n();
+  const { notify } = useNotification();
+
   const book = ref(
     initialBook || {
       title: "",
@@ -38,7 +41,7 @@ export function useBookForm(initialBook = null) {
 
     // Check file type
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      alert(t("admin.uploadImage.formatError"));
+      notify.warning(t("admin.uploadImage.formatError"));
       event.target.value = ""; // Reset file input
       return;
     }
@@ -63,7 +66,7 @@ export function useBookForm(initialBook = null) {
         (error) => {
           // Handle unsuccessful uploads
           console.error("Upload failed:", error);
-          alert(t("admin.uploadImage.failed"));
+          notify.error(t("admin.uploadImage.failed"));
         },
         async () => {
           try {
@@ -81,13 +84,13 @@ export function useBookForm(initialBook = null) {
             uploadProgress.value = 0;
           } catch (error) {
             console.error("Error getting resized image URL:", error);
-            alert(t("admin.uploadImage.failed"));
+            notify.error(t("admin.uploadImage.failed"));
           }
         },
       );
     } catch (error) {
       console.error("Error handling image upload:", error);
-      alert(t("admin.uploadImage.failed"));
+      notify.error(t("admin.uploadImage.failed"));
     }
   };
 
@@ -113,10 +116,10 @@ export function useBookForm(initialBook = null) {
         borrowerId: null,
       };
 
-      alert(t("admin.addBook.messages.success"));
+      notify.success(t("admin.addBook.messages.success"));
     } catch (error) {
       console.error("Error adding book:", error);
-      alert(t("admin.addBook.messages.failed"));
+      notify.error(t("admin.addBook.messages.failed"));
     }
   };
 

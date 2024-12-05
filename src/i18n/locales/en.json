@@ -30,6 +30,7 @@
     "messages": {
       "returnSuccess": "Return request sent to owner",
       "receiveSuccess": "Book received successfully",
+      "borrowSuccess": "Book borrowed successfully",
       "failed": "Operation failed. Please try again."
     },
     "searchPlaceholder": "Search...",

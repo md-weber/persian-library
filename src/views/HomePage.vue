@@ -180,9 +180,12 @@ import { db } from "@/repositories/firebase";
 import BaseLayout from "@/components/BaseLayout.vue";
 import QuickFilters from "@/components/QuickFilters.vue";
 import { useAuthStore } from "@/stores/authStore";
+import { useNotification } from "@/composables/useNotification";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const { notify } = useNotification();
+
 const books = ref([]);
 const error = ref(null);
 const searchQuery = ref("");
@@ -306,10 +309,10 @@ const returnBook = async (book) => {
       returnedAt: new Date(),
       status: "pending_return",
     });
-    alert(t("home.messages.returnSuccess"));
+    notify.success(t("home.messages.returnSuccess"));
   } catch (error) {
     console.error("Error returning book:", error);
-    alert(t("home.messages.failed"));
+    notify.error(t("home.messages.failed"));
   }
 };
 
@@ -323,10 +326,10 @@ const receiveBook = async (book) => {
       returnedAt: null,
       status: "available",
     });
-    alert(t("home.messages.receiveSuccess"));
+    notify.success(t("home.messages.receiveSuccess"));
   } catch (error) {
     console.error("Error receiving book:", error);
-    alert(t("home.messages.failed"));
+    notify.error(t("home.messages.failed"));
   }
 };
 
@@ -343,9 +346,10 @@ const borrowBook = async (book) => {
       borrowerId: authStore.user.id,
       borrowedAt: new Date(),
     });
+    notify.success("home.messages.borrowSuccess");
   } catch (error) {
     console.error("Error updating book:", error);
-    alert(t("home.messages.failed"));
+    notify.error("home.messages.failed");
   }
 };
 </script>

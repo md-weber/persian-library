@@ -3,9 +3,12 @@ import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { ref as storageRef, deleteObject } from "firebase/storage";
 import { db, storage } from "@/repositories/firebase";
 import { useI18n } from "vue-i18n";
+import { useNotification } from "@/composables/useNotification";
 
 export function useBooks() {
   const { t } = useI18n();
+  const { notify } = useNotification();
+
   const books = ref([]);
 
   const deleteBook = async (book) => {
@@ -21,10 +24,10 @@ export function useBooks() {
 
         // Delete the book document
         await deleteDoc(doc(db, "books", book.id));
-        alert(t("admin.manageBooks.messages.success"));
+        notify.success(t("admin.manageBooks.messages.success"));
       } catch (error) {
         console.error("Error deleting book:", error);
-        alert(t("admin.manageBooks.messages.failed"));
+        notify.error(t("admin.manageBooks.messages.failed"));
       }
     }
   };
