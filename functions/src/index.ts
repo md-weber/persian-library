@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v2";
 import * as admin from "firebase-admin";
 import * as sharp from "sharp";
 import * as path from "path";
@@ -7,20 +7,21 @@ import * as fs from "fs";
 
 admin.initializeApp();
 
-export const resizeImage = functions.storage.onObjectFinalized(
-  async (object: any) => {
+// Changed name to imageProcessor or any other name you prefer
+export const imageProcessor = functions.storage.onObjectFinalized(
+  async (event) => {
     // Exit if this is triggered on a file that is not an image.
-    if (!object.contentType?.includes("image/")) {
+    if (!event.data.contentType?.includes("image/")) {
       return;
     }
 
     // Exit if this is already a resized image
-    if (object.name?.includes("resized_")) {
+    if (event.data.name?.includes("resized_")) {
       return;
     }
 
-    const bucket = admin.storage().bucket(object.bucket);
-    const filePath = object.name!;
+    const bucket = admin.storage().bucket(event.data.bucket);
+    const filePath = event.data.name;
     const fileName = path.basename(filePath);
     const tempFilePath = path.join(os.tmpdir(), fileName);
     const targetPath = path.join(path.dirname(filePath), `resized_${fileName}`);
@@ -41,10 +42,10 @@ export const resizeImage = functions.storage.onObjectFinalized(
       await bucket.upload(tempFilePath + "_resized", {
         destination: targetPath,
         metadata: {
-          contentType: object.contentType,
+          contentType: event.data.contentType,
           metadata: {
             firebaseStorageDownloadTokens:
-              object.metadata?.firebaseStorageDownloadTokens,
+              event.data.metadata?.firebaseStorageDownloadTokens,
           },
         },
       });

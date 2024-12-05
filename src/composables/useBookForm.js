@@ -69,6 +69,7 @@ export function useBookForm() {
               storage,
               `covers/resized_${filename.split("/").pop()}`,
             );
+
             const downloadURL = await getDownloadURL(resizedFileRef);
             newBook.value.coverImage = downloadURL;
             uploadProgress.value = 0;
