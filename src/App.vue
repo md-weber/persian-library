@@ -17,7 +17,7 @@
           </RouterLink>
           <div>
             <RouterLink
-              v-if="authStore.isAuthenticated()"
+              v-if="authStore.isAuthenticated() && authStore.isAdmin()"
               to="/admin"
               class="text-indigo-600 hover:text-indigo-800 mr-4"
             >

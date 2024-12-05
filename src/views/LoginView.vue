@@ -87,7 +87,11 @@ const error = ref("");
 const handleLogin = async () => {
   try {
     await authStore.signIn(email.value, password.value);
-    router.push("/admin");
+    if (authStore.isAdmin()) {
+      router.push("/admin");
+    } else {
+      router.push("/"); // Regular users go to home
+    }
   } catch (err) {
     error.value = t("errors.invalidEmailOrPassword");
   }
