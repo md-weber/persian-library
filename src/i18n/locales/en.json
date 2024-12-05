@@ -143,7 +143,8 @@
       "firebase": "This application uses Firebase services for data storage, authentication, and hosting. By using this service, you agree to Google's data processing terms.",
       "fairUse": "This application is only intented to be used from a private Farsi group, therefore no impressum and data-privacy information is needed."
     },
-    "copyright": "© {year} Persian Children's Library. All rights reserved."
+    "copyright": "© {year} Persian Children's Library. All rights reserved.",
+    "supportOnGithub": "Support on GitHub"
   },
   "common": {
     "save": "Save",
