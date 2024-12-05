@@ -49,6 +49,17 @@
             </button>
           </div>
         </form>
+        <div class="text-center">
+          <p class="text-sm text-gray-600">
+            {{ $t("auth.register.haveAccount") }}
+            <RouterLink
+              to="/login"
+              class="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              {{ $t("auth.register.loginLink") }}
+            </RouterLink>
+          </p>
+        </div>
         <div v-if="error" class="text-red-500 text-center mt-2">
           {{ error }}
         </div>

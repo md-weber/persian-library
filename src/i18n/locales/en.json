@@ -83,14 +83,27 @@
         "delete": "Delete",
         "edit": "Edit"
       }
-    },
+    }
+  },
+  "auth": {
     "login": {
-      "title": "Admin Login",
+      "title": "Login",
       "emailPlaceholder": "Email address",
       "emailLabel": "Email address",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Password",
-      "signInButton": "Sign in"
+      "signInButton": "Sign in",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register here"
+    },
+    "register": {
+      "title": "Create an account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "namePlaceholder": "Name",
+      "emailPlaceholder": "Email address",
+      "passwordPlaceholder": "Password",
+      "submitButton": "Register"
     }
   },
   "errors": {

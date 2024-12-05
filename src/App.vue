@@ -49,15 +49,34 @@
 </template>
 
 <script setup>
-import { useAuthStore } from "@/stores/authStore";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useAuthStore } from "@/stores/authStore";
+import { auth } from "@/repositories/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/repositories/firebase";
 
 const { locale } = useI18n();
 const currentLocale = ref(locale.value);
 const authStore = useAuthStore();
 const router = useRouter();
+
+onMounted(() => {
+  onAuthStateChanged(auth, async (firebaseUser) => {
+    if (firebaseUser) {
+      // Get user data from Firestore
+      const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+      if (userDoc.exists()) {
+        authStore.user = { id: firebaseUser.uid, ...userDoc.data() };
+      }
+    } else {
+      authStore.user = null;
+    }
+    authStore.loading = false;
+  });
+});
 
 const changeLanguage = () => {
   locale.value = currentLocale.value;
