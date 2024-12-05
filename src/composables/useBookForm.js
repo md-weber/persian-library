@@ -85,8 +85,7 @@ export function useBookForm() {
         createdAt: new Date(),
       });
 
-      // Reset form
-      newBook.value = {
+      const newBook = ref({
         title: "",
         author: "",
         translator: "",
@@ -95,7 +94,9 @@ export function useBookForm() {
         description: "",
         coverImage: "",
         isAvailable: true,
-      };
+        ownerId: "", // Add owner field
+        borrowerId: null, // Add borrower field (null when not borrowed)
+      });
 
       alert(t("admin.addBook.messages.success"));
     } catch (error) {

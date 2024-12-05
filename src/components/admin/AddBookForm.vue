@@ -16,6 +16,22 @@
         </div>
 
         <div>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ $t("admin.addBook.form.owner") }}
+          </label>
+          <select
+            v-model="newBook.ownerId"
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          >
+            <option value="">{{ $t("admin.addBook.form.selectOwner") }}</option>
+            <option v-for="user in users" :key="user.id" :value="user.id">
+              {{ user.name }}
+            </option>
+          </select>
+        </div>
+
+        <div>
           <label class="block text-sm font-medium text-gray-700">{{
             $t("admin.addBook.form.author")
           }}</label>
@@ -124,7 +140,9 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import { useBookForm } from "@/composables/useBookForm";
+import { useUsers } from "@/composables/useUsers";
 
 const {
   newBook,
@@ -133,4 +151,5 @@ const {
   uploadProgress,
   isUploading,
 } = useBookForm();
+const { users } = useUsers();
 </script>

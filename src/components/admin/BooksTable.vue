@@ -19,6 +19,16 @@
           <th
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
+            {{ $t("admin.manageBooks.table.owner") }}
+          </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            {{ $t("admin.manageBooks.table.borrower") }}
+          </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
             {{ $t("admin.manageBooks.table.status") }}
           </th>
           <th
@@ -32,6 +42,12 @@
         <tr v-for="book in books" :key="book.id">
           <td class="px-6 py-4">{{ book.title }}</td>
           <td class="px-6 py-4">{{ book.author }}</td>
+          <td class="px-6 py-4">
+            {{ book.owner?.name || "-" }}
+          </td>
+          <td class="px-6 py-4">
+            {{ book.borrower?.name || "-" }}
+          </td>
           <td class="px-6 py-4">
             <span :class="book.isAvailable ? 'text-green-600' : 'text-red-600'">
               {{
@@ -63,11 +79,24 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from "vue";
+import { useUsers } from "@/composables/useUsers";
+
+const props = defineProps({
   books: {
     type: Array,
     required: true,
   },
+});
+
+const { users } = useUsers();
+
+const booksWithUsers = computed(() => {
+  return props.books.map((book) => ({
+    ...book,
+    owner: users.value.find((user) => user.id === book.ownerId),
+    borrower: users.value.find((user) => user.id === book.borrowerId),
+  }));
 });
 
 defineEmits(["delete-book", "edit-book"]);

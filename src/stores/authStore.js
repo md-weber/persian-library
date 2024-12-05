@@ -1,54 +1,31 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { auth } from "@/repositories/firebase";
-import {
-  signInWithEmailAndPassword,
-  signOut as firebaseSignOut,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { useAuth } from "@/composables/useAuth";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref(null);
-  const loading = ref(true);
-
-  // Initialize auth state
-  onAuthStateChanged(auth, (firebaseUser) => {
-    user.value = firebaseUser;
-    loading.value = false;
-  });
+  const { signIn: authSignIn, signOut: authSignOut } = useAuth();
 
   const signIn = async (email, password) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      user.value = userCredential.user;
-      return true;
-    } catch (error) {
-      console.error("Auth error:", error);
-      throw error;
-    }
+    const userData = await authSignIn(email, password);
+    user.value = userData;
   };
 
   const signOut = async () => {
-    try {
-      await firebaseSignOut(auth);
-      user.value = null;
-    } catch (error) {
-      console.error("Sign out error:", error);
-      throw error;
-    }
+    await authSignOut();
+    user.value = null;
   };
 
-  const isAuthenticated = () => user.value !== null;
+  const isAuthenticated = () => !!user.value;
+  const isAdmin = () => user.value?.role === "admin";
+  const isUser = () => user.value?.role === "user";
 
   return {
     user,
-    loading,
     signIn,
     signOut,
     isAuthenticated,
+    isAdmin,
+    isUser,
   };
 });

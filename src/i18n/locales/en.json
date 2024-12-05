@@ -53,6 +53,8 @@
         "ageGroup": "Age Group",
         "coverImage": "Cover Image",
         "description": "Description",
+        "owner": "Owner",
+        "selectOwner": "Select an owner",
         "submit": "Add Book",
         "uploadProgress": "Uploading: { progress } %",
         "waitForUpload": "Please wait for the image upload to complete"
@@ -76,6 +78,8 @@
         "actions": "Actions",
         "available": "Available",
         "borrowed": "Borrowed",
+        "owner": "Owner",
+        "borrower": "Borrowed By",
         "delete": "Delete",
         "edit": "Edit"
       }

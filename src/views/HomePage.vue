@@ -152,12 +152,16 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
-import BaseLayout from "@/components/BaseLayout.vue";
 import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
+import BaseLayout from "@/components/BaseLayout.vue";
 import QuickFilters from "@/components/QuickFilters.vue";
+import { useAuthStore } from "@/stores/authStore";
 
+const router = useRouter();
+const authStore = useAuthStore();
 const books = ref([]);
 const error = ref(null);
 const searchQuery = ref("");
@@ -217,19 +221,21 @@ onMounted(() => {
 });
 
 const borrowBook = async (book) => {
-  const borrowerName = prompt(t("home.enterYourNamePrompt"));
-  if (borrowerName) {
-    try {
-      const bookRef = doc(db, "books", book.id);
-      await updateDoc(bookRef, {
-        isAvailable: false,
-        borrower: borrowerName,
-        borrowedAt: new Date(),
-      });
-    } catch (error) {
-      console.error("Error updating book:", error);
-      alert(t("home.messages.failed"));
-    }
+  if (!authStore.user) {
+    router.push("/login");
+    return;
+  }
+
+  try {
+    const bookRef = doc(db, "books", book.id);
+    await updateDoc(bookRef, {
+      isAvailable: false,
+      borrowerId: authStore.user.id,
+      borrowedAt: new Date(),
+    });
+  } catch (error) {
+    console.error("Error updating book:", error);
+    alert(t("home.messages.failed"));
   }
 };
 </script>

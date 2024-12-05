@@ -19,7 +19,7 @@ const routes = [
     path: "/admin",
     name: "admin",
     component: AdminView,
-    meta: { requiresAuth: true },
+    meta: { requiresAdmin: true },
   },
 ];
 
@@ -32,8 +32,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
-  if (to.meta.requiresAuth && !authStore.isAuthenticated()) {
-    next("/login");
+  if (to.meta.requiresAuth && !authStore.isAdmin()) {
+    next("/");
   } else {
     next();
   }
