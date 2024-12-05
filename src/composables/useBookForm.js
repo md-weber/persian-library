@@ -19,7 +19,7 @@ export function useBookForm() {
     description: "",
     coverImage: "",
     isAvailable: true,
-    owner: "",
+    ownerId: "", // Change from owner to ownerId
     borrowerId: null,
   });
 
@@ -103,7 +103,7 @@ export function useBookForm() {
         description: "",
         coverImage: "",
         isAvailable: true,
-        owner: "", // Reset owner field
+        ownerId: "", // Change this line
         borrowerId: null,
       };
 

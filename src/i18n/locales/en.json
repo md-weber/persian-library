@@ -54,6 +54,7 @@
         "coverImage": "Cover Image",
         "description": "Description",
         "owner": "Owner",
+        "selectOwner": "Select an owner",
         "ownerPlaceholder": "Enter owner name",
         "submit": "Add Book",
         "uploadProgress": "Uploading: { progress } %",

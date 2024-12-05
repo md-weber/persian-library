@@ -43,10 +43,10 @@
           <td class="px-6 py-4">{{ book.title }}</td>
           <td class="px-6 py-4">{{ book.author }}</td>
           <td class="px-6 py-4">
-            {{ book.owner || "-" }}
+            {{ getUserName(book.ownerId) || "-" }}
           </td>
           <td class="px-6 py-4">
-            {{ book.borrower || "-" }}
+            {{ getUserName(book.borrowerId) || "-" }}
           </td>
           <td class="px-6 py-4">
             <span :class="book.isAvailable ? 'text-green-600' : 'text-red-600'">
@@ -103,6 +103,12 @@ const props = defineProps({
 const emit = defineEmits(["delete-book", "update-book"]);
 
 const { users } = useUsers();
+
+const getUserName = (userId) => {
+  if (!userId) return null;
+  const user = users.value.find((user) => user.id === userId);
+  return user ? user.name : null;
+};
 
 const booksWithUsers = computed(() => {
   return props.books.map((book) => ({

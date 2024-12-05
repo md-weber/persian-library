@@ -55,6 +55,7 @@
         "description": "توضیحات",
         "submit": "افزودن کتاب",
         "owner": "صاحب کتاب",
+        "selectOwner": "Select an owner",
         "ownerPlaceholder": "نام صاحب کتاب را وارد کنید",
         "waitForUpload": "لطفا تا پایان آپلود تصویر صبر کنید",
         "uploadProgress": "در حال آپلود: {progress} درصد"
