@@ -28,12 +28,35 @@
               <label class="block text-sm font-medium text-gray-700">
                 {{ $t("admin.addBook.form.owner") }}
               </label>
-              <input
-                v-model="editedBook.owner"
-                type="text"
+              <select
+                v-model="editedBook.ownerId"
                 required
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
+              >
+                <option value="">
+                  {{ $t("admin.addBook.form.selectOwner") }}
+                </option>
+                <option v-for="user in users" :key="user.id" :value="user.id">
+                  {{ user.name }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700">
+                {{ $t("admin.addBook.form.borrower") }}
+              </label>
+              <select
+                v-model="editedBook.borrowerId"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="">
+                  {{ $t("admin.addBook.form.selectBorrower") }}
+                </option>
+                <option v-for="user in users" :key="user.id" :value="user.id">
+                  {{ user.name }}
+                </option>
+              </select>
             </div>
 
             <div>
@@ -141,8 +164,11 @@ import { ref, watch } from "vue";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
 import { useI18n } from "vue-i18n";
+import { useUsers } from "@/composables/useUsers";
 
 const { t } = useI18n();
+const { users } = useUsers();
+
 const props = defineProps({
   show: Boolean,
   book: {

@@ -54,6 +54,8 @@
         "coverImage": "Cover Image",
         "description": "Description",
         "owner": "Owner",
+        "selectBorrower": "Select a borrower",
+        "borrower": "Borrower",
         "selectOwner": "Select an owner",
         "ownerPlaceholder": "Enter owner name",
         "submit": "Add Book",

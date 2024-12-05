@@ -56,6 +56,8 @@
         "submit": "افزودن کتاب",
         "owner": "صاحب کتاب",
         "selectOwner": "Select an owner",
+        "selectBorrower": "Select a borrower",
+        "borrower": "Borrower",
         "ownerPlaceholder": "نام صاحب کتاب را وارد کنید",
         "waitForUpload": "لطفا تا پایان آپلود تصویر صبر کنید",
         "uploadProgress": "در حال آپلود: {progress} درصد"
