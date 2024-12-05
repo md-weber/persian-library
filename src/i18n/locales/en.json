@@ -54,7 +54,8 @@
         "coverImage": "Cover Image",
         "description": "Description",
         "submit": "Add Book",
-        "uploadProgress": "Uploading: { progress } %"
+        "uploadProgress": "Uploading: { progress } %",
+        "waitForUpload": "Please wait for the image upload to complete"
       },
       "messages": {
         "success": "Book added successfully!",

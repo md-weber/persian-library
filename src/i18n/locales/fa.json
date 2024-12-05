@@ -50,7 +50,8 @@
         "coverImage": "تصویر جلد",
         "description": "توضیحات",
         "submit": "افزودن کتاب",
-        "uploadProgress": "در حال آپلود: {progress} درصد"
+        "uploadProgress": "در حال آپلود: {progress} درصد",
+        "waitForUpload": "Please wait for the image upload to complete"
       },
       "messages": {
         "success": "کتاب با موفقیت اضافه شد!",
