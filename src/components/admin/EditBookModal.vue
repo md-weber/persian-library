@@ -137,7 +137,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
 import { useI18n } from "vue-i18n";
@@ -145,16 +145,36 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const props = defineProps({
   show: Boolean,
-  book: Object,
+  book: {
+    type: Object,
+    required: true,
+  },
 });
 
 const emit = defineEmits(["close", "update:book"]);
-const editedBook = ref({ ...props.book });
+const editedBook = ref({});
 const isUpdating = ref(false);
 
-onMounted(() => {
-  editedBook.value = { ...props.book };
-});
+// Watch for changes in the book prop
+watch(
+  () => props.book,
+  (newBook) => {
+    if (newBook) {
+      editedBook.value = { ...newBook };
+    }
+  },
+  { immediate: true, deep: true },
+);
+
+// Watch for show prop to reset form when modal is opened
+watch(
+  () => props.show,
+  (newShow) => {
+    if (newShow) {
+      editedBook.value = { ...props.book };
+    }
+  },
+);
 
 const handleSubmit = async () => {
   try {

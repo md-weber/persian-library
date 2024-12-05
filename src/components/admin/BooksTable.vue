@@ -112,7 +112,7 @@ const booksWithUsers = computed(() => {
 });
 
 const editBook = (book) => {
-  selectedBook.value = { ...book };
+  selectedBook.value = JSON.parse(JSON.stringify(book));
   showEditModal.value = true;
 };
 
