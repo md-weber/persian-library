@@ -13,13 +13,20 @@
     "loading": "در حال بارگذاری..."
   },
   "home": {
+    "status": {
+      "youBorrowed": "شما این کتاب را امانت گرفته‌اید",
+      "pendingReturn": "در انتظار بازگشت",
+      "returnPending": "در انتظار تایید بازگشت",
+      "confirmReturn": "در انتظار تایید شما",
+      "waitingForOwner": "در انتظار تایید صاحب کتاب"
+    },
     "messages": {
+      "returnSuccess": "درخواست بازگشت برای صاحب کتاب ارسال شد",
+      "receiveSuccess": "کتاب با موفقیت دریافت شد",
       "failed": "امانت گرفتن کتاب با خطا مواجه شد. لطفا دوباره تلاش کنید."
     },
-    "status": {
-      "available": "موجود",
-      "currentlyBorrowed": "در حال امانت"
-    },
+    "returnBook": "بازگرداندن کتاب",
+    "receiveBook": "تایید بازگشت",
     "searchPlaceholder": "جستجو...",
     "booksCount": "نمایش {filtered} از {total} کتاب",
     "bookTranslatorLabel": "مترجم: {translator}",
@@ -81,7 +88,15 @@
       "table": {
         "title": "عنوان",
         "author": "نویسنده",
-        "status": "وضعیت",
+        "status": {
+          "title": "وضعیت",
+          "available": "موجود",
+          "borrowed": "امانت داده شده",
+          "pendingReturn": "در انتظار بازگشت"
+        },
+        "lastAction": "آخرین عملیات",
+        "returnRequestedAt": "درخواست بازگشت: {date}",
+        "borrowedAt": "امانت گرفته شده در: {date}",
         "actions": "عملیات",
         "available": "موجود",
         "borrowed": "امانت داده شده",

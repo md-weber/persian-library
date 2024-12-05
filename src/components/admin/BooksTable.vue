@@ -29,8 +29,14 @@
           <th
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-            {{ $t("admin.manageBooks.table.status") }}
+            {{ $t("admin.manageBooks.table.status.title") }}
           </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            {{ $t("admin.manageBooks.table.lastAction") }}
+          </th>
+
           <th
             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
@@ -49,13 +55,12 @@
             {{ getUserName(book.borrowerId) || "-" }}
           </td>
           <td class="px-6 py-4">
-            <span :class="book.isAvailable ? 'text-green-600' : 'text-red-600'">
-              {{
-                book.isAvailable
-                  ? $t("admin.manageBooks.table.available")
-                  : $t("admin.manageBooks.table.borrowed")
-              }}
+            <span :class="getStatusClass(book)">
+              {{ getStatusText(book) }}
             </span>
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-500">
+            {{ getLastActionText(book) }}
           </td>
           <td class="px-6 py-4">
             <button
@@ -89,7 +94,9 @@
 import { computed, ref } from "vue";
 import { useUsers } from "@/composables/useUsers";
 import EditBookModal from "./EditBookModal.vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const showEditModal = ref(false);
 const selectedBook = ref(null);
 
@@ -103,6 +110,44 @@ const props = defineProps({
 const emit = defineEmits(["delete-book", "update-book"]);
 
 const { users } = useUsers();
+
+const getLastActionText = (book) => {
+  if (book.status === "pending_return" && book.returnedAt) {
+    return t("admin.manageBooks.table.returnRequestedAt", {
+      date: new Date(book.returnedAt.toDate()).toLocaleDateString(),
+    });
+  }
+  if (book.borrowedAt) {
+    return t("admin.manageBooks.table.borrowedAt", {
+      date: new Date(book.borrowedAt.toDate()).toLocaleDateString(),
+    });
+  }
+  return "-";
+};
+
+const getStatusClass = (book) => {
+  if (book.status === "pending_return") {
+    return "text-orange-600";
+  }
+  if (book.isAvailable) {
+    return "text-green-600";
+  }
+  return "text-red-600";
+};
+
+const getStatusText = (book) => {
+  switch (book.status) {
+    case "pending_return":
+      return t("admin.manageBooks.table.status.pendingReturn");
+    case "available":
+      return t("admin.manageBooks.table.status.available");
+    default:
+      if (!book.isAvailable) {
+        return t("admin.manageBooks.table.status.borrowed");
+      }
+      return t("admin.manageBooks.table.status.available");
+  }
+};
 
 const getUserName = (userId) => {
   if (!userId) return null;

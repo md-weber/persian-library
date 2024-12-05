@@ -110,29 +110,50 @@
             <!-- Availability Status -->
             <div class="mt-auto">
               <div class="flex items-center justify-center">
-                <span
-                  class="text-sm"
-                  :class="book.isAvailable ? 'text-green-600' : 'text-red-600'"
-                >
-                  {{
-                    book.isAvailable
-                      ? $t("home.status.available")
-                      : $t("home.status.currentlyBorrowed")
-                  }}
+                <span class="text-sm" :class="getStatusClass(book)">
+                  {{ getBookStatus(book) }}
                 </span>
               </div>
 
-              <!-- Borrow Button -->
+              <!-- Action Button -->
               <button
+                v-if="showBorrowButton(book)"
                 @click="borrowBook(book)"
                 :disabled="!book.isAvailable"
-                class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed text-white bg-indigo-600 hover:bg-indigo-700"
+                class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{
-                  book.isAvailable
-                    ? $t("home.borrowBook")
-                    : $t("home.notAvailable")
-                }}
+                {{ $t("home.borrowBook") }}
+              </button>
+
+              <button
+                v-else-if="showReturnButton(book)"
+                @click="returnBook(book)"
+                class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700"
+              >
+                {{ $t("home.returnBook") }}
+              </button>
+
+              <button
+                v-else-if="showReceiveButton(book)"
+                @click="receiveBook(book)"
+                class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+              >
+                {{ $t("home.receiveBook") }}
+              </button>
+
+              <div
+                v-else-if="showPendingReturnMessage(book)"
+                class="mt-3 text-sm text-center text-gray-600"
+              >
+                {{ $t("home.status.waitingForOwner") }}
+              </div>
+
+              <button
+                v-else
+                disabled
+                class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium text-white bg-gray-400 cursor-not-allowed"
+              >
+                {{ $t("home.notAvailable") }}
               </button>
             </div>
           </div>
@@ -166,6 +187,64 @@ const books = ref([]);
 const error = ref(null);
 const searchQuery = ref("");
 const displayedBooks = ref([]);
+
+const getStatusClass = (book) => {
+  if (book.status === "pending_return") return "text-orange-600";
+  if (book.isAvailable) return "text-green-600";
+  return "text-red-600";
+};
+
+const getBookStatus = (book) => {
+  if (book.status === "pending_return") {
+    if (book.borrowerId === authStore.user?.id) {
+      return t("home.status.returnPending");
+    }
+    if (book.ownerId === authStore.user?.id) {
+      return t("home.status.confirmReturn");
+    }
+    return t("home.status.pendingReturn");
+  }
+
+  if (book.isAvailable) {
+    return t("home.status.available");
+  }
+  if (book.borrowerId === authStore.user?.id) {
+    return t("home.status.youBorrowed");
+  }
+  if (book.ownerId === authStore.user?.id) {
+    return t("home.status.pendingReturn");
+  }
+  return t("home.status.currentlyBorrowed");
+};
+
+const showBorrowButton = (book) => {
+  return (
+    book.isAvailable &&
+    book.ownerId !== authStore.user?.id &&
+    book.status !== "pending_return"
+  );
+};
+const showReturnButton = (book) => {
+  return (
+    !book.isAvailable &&
+    book.borrowerId === authStore.user?.id &&
+    book.status !== "pending_return"
+  );
+};
+
+const showReceiveButton = (book) => {
+  return (
+    !book.isAvailable &&
+    book.ownerId === authStore.user?.id &&
+    book.status === "pending_return"
+  );
+};
+
+const showPendingReturnMessage = (book) => {
+  return (
+    book.status === "pending_return" && book.borrowerId === authStore.user?.id
+  );
+};
 
 // Helper function to check if a value is a string and contains the search query
 const matchesSearch = (value, query) => {
@@ -219,6 +298,37 @@ onMounted(() => {
     error.value = "Error connecting to database. Please try again later.";
   }
 });
+
+const returnBook = async (book) => {
+  try {
+    const bookRef = doc(db, "books", book.id);
+    await updateDoc(bookRef, {
+      returnedAt: new Date(),
+      status: "pending_return",
+    });
+    alert(t("home.messages.returnSuccess"));
+  } catch (error) {
+    console.error("Error returning book:", error);
+    alert(t("home.messages.failed"));
+  }
+};
+
+const receiveBook = async (book) => {
+  try {
+    const bookRef = doc(db, "books", book.id);
+    await updateDoc(bookRef, {
+      isAvailable: true,
+      borrowerId: null,
+      borrowedAt: null,
+      returnedAt: null,
+      status: "available",
+    });
+    alert(t("home.messages.receiveSuccess"));
+  } catch (error) {
+    console.error("Error receiving book:", error);
+    alert(t("home.messages.failed"));
+  }
+};
 
 const borrowBook = async (book) => {
   if (!authStore.user) {
