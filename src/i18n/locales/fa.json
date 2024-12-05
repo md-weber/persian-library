@@ -16,6 +16,10 @@
     "messages": {
       "failed": "امانت گرفتن کتاب با خطا مواجه شد. لطفا دوباره تلاش کنید."
     },
+    "status": {
+      "available": "موجود",
+      "currentlyBorrowed": "در حال امانت"
+    },
     "searchPlaceholder": "جستجو...",
     "booksCount": "نمایش {filtered} از {total} کتاب",
     "bookTranslatorLabel": "مترجم: {translator}",
@@ -50,10 +54,10 @@
         "coverImage": "تصویر جلد",
         "description": "توضیحات",
         "submit": "افزودن کتاب",
-        "owner": "Owner",
-        "selectOwner": "Select an owner",
-        "uploadProgress": "در حال آپلود: {progress} درصد",
-        "waitForUpload": "Please wait for the image upload to complete"
+        "owner": "صاحب کتاب",
+        "ownerPlaceholder": "نام صاحب کتاب را وارد کنید",
+        "waitForUpload": "لطفا تا پایان آپلود تصویر صبر کنید",
+        "uploadProgress": "در حال آپلود: {progress} درصد"
       },
       "messages": {
         "success": "کتاب با موفقیت اضافه شد!",
@@ -74,19 +78,32 @@
         "actions": "عملیات",
         "available": "موجود",
         "borrowed": "امانت داده شده",
-        "owner": "Owner",
-        "borrower": "Borrowed By",
+        "owner": "صاحب کتاب",
+        "borrower": "امانت گیرنده",
         "delete": "حذف",
         "edit": "ویرایش"
       }
-    },
+    }
+  },
+  "auth": {
     "login": {
-      "title": "ورود مدیر",
+      "title": "ورود به سیستم",
       "emailPlaceholder": "آدرس ایمیل",
       "emailLabel": "آدرس ایمیل",
       "passwordLabel": "رمز عبور",
       "passwordPlaceholder": "رمز عبور",
-      "signInButton": "ورود به سیستم"
+      "signInButton": "ورود",
+      "noAccount": "حساب کاربری ندارید؟",
+      "registerLink": "ثبت نام کنید"
+    },
+    "register": {
+      "title": "ایجاد حساب کاربری",
+      "haveAccount": "قبلاً حساب کاربری دارید؟",
+      "loginLink": "وارد شوید",
+      "namePlaceholder": "نام",
+      "emailPlaceholder": "آدرس ایمیل",
+      "passwordPlaceholder": "رمز عبور",
+      "submitButton": "ثبت نام"
     }
   },
   "errors": {
@@ -96,6 +113,7 @@
     "title": "کتابخانه کودکان فارسی",
     "description": "یک پلتفرم دیجیتال برای دسترسی همگانی به ادبیات کودکان فارسی",
     "dataPrivacy": {
+      "fairUse": "این برنامه فقط برای استفاده یک گروه خصوصی فارسی زبان در نظر گرفته شده است، بنابراین نیازی به اطلاعات حقوقی و حریم خصوصی نیست.",
       "title": "اطلاعات حریم خصوصی",
       "storage": "لطفاً توجه داشته باشید که تمام تصاویر و داده‌ها در سرورهای مستقر در ایالات متحده با استفاده از زیرساخت Google Cloud ذخیره می‌شوند.",
       "firebase": "این برنامه از خدمات Firebase برای ذخیره‌سازی داده‌ها، احراز هویت و میزبانی استفاده می‌کند. با استفاده از این سرویس، شما با شرایط پردازش داده Google موافقت می‌کنید."

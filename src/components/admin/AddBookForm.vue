@@ -19,16 +19,13 @@
           <label class="block text-sm font-medium text-gray-700">
             {{ $t("admin.addBook.form.owner") }}
           </label>
-          <select
-            v-model="newBook.ownerId"
+          <input
+            v-model="newBook.owner"
+            type="text"
             required
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          >
-            <option value="">{{ $t("admin.addBook.form.selectOwner") }}</option>
-            <option v-for="user in users" :key="user.id" :value="user.id">
-              {{ user.name }}
-            </option>
-          </select>
+            :placeholder="$t('admin.addBook.form.ownerPlaceholder')"
+          />
         </div>
 
         <div>

@@ -43,10 +43,10 @@
           <td class="px-6 py-4">{{ book.title }}</td>
           <td class="px-6 py-4">{{ book.author }}</td>
           <td class="px-6 py-4">
-            {{ book.owner?.name || "-" }}
+            {{ book.owner || "-" }}
           </td>
           <td class="px-6 py-4">
-            {{ book.borrower?.name || "-" }}
+            {{ book.borrower || "-" }}
           </td>
           <td class="px-6 py-4">
             <span :class="book.isAvailable ? 'text-green-600' : 'text-red-600'">

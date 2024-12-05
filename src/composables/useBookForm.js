@@ -19,7 +19,10 @@ export function useBookForm() {
     description: "",
     coverImage: "",
     isAvailable: true,
+    owner: "",
+    borrowerId: null,
   });
+
   const uploadProgress = ref(0);
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
   const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -85,7 +88,8 @@ export function useBookForm() {
         createdAt: new Date(),
       });
 
-      const newBook = ref({
+      // Reset form
+      newBook.value = {
         title: "",
         author: "",
         translator: "",
@@ -94,9 +98,9 @@ export function useBookForm() {
         description: "",
         coverImage: "",
         isAvailable: true,
-        ownerId: "", // Add owner field
-        borrowerId: null, // Add borrower field (null when not borrowed)
-      });
+        owner: "", // Reset owner field
+        borrowerId: null,
+      };
 
       alert(t("admin.addBook.messages.success"));
     } catch (error) {
