@@ -76,6 +76,7 @@
       </tbody>
     </table>
     <EditBookModal
+      v-if="selectedBook"
       :show="showEditModal"
       :book="selectedBook"
       @close="closeEditModal"
@@ -118,7 +119,9 @@ const editBook = (book) => {
 
 const closeEditModal = () => {
   showEditModal.value = false;
-  selectedBook.value = null;
+  setTimeout(() => {
+    selectedBook.value = null;
+  }, 200);
 };
 
 const handleBookUpdate = (updatedBook) => {
