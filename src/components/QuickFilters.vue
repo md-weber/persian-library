@@ -37,6 +37,20 @@
       <!-- Quick Filter Buttons -->
       <div class="flex flex-wrap gap-2 items-end flex-1 min-w-[200px]">
         <button
+          v-if="userId && userBooksCount != 0"
+          @click="toggleMyBooks"
+          :class="[
+            'px-4 py-2 rounded-md text-sm font-medium',
+            showMyBooks
+              ? 'bg-indigo-600 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+          ]"
+        >
+          {{ $t("filters.myBooks") }}
+          <span class="ml-1 text-xs"> ({{ userBooksCount }}) </span>
+        </button>
+
+        <button
           @click="toggleNewArrivals"
           :class="[
             'px-4 py-2 rounded-md text-sm font-medium',
@@ -63,8 +77,10 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useAuthStore } from "@/stores/authStore";
 
 const { t } = useI18n();
+const authStore = useAuthStore();
 
 const props = defineProps({
   books: {
@@ -79,6 +95,15 @@ const emit = defineEmits(["update:filtered-books"]);
 const selectedAvailability = ref("all");
 const selectedAgeGroup = ref("all");
 const showNewArrivals = ref(false);
+const showMyBooks = ref(false);
+
+// Get current user ID
+const userId = computed(() => authStore.user?.id);
+
+const userBooksCount = computed(() => {
+  if (!userId.value) return 0;
+  return props.books.filter((book) => book.ownerId === userId.value).length;
+});
 
 // Computed unique age groups from books
 const ageGroups = computed(() => {
@@ -89,6 +114,11 @@ const ageGroups = computed(() => {
 // Filter functions
 const applyFilters = () => {
   let filtered = [...props.books];
+
+  // My Books filter
+  if (showMyBooks.value && userId.value) {
+    filtered = filtered.filter((book) => book.ownerId === userId.value);
+  }
 
   // Availability filter
   if (selectedAvailability.value !== "all") {
@@ -128,11 +158,18 @@ const toggleNewArrivals = () => {
   applyFilters();
 };
 
+// Toggle my books
+const toggleMyBooks = () => {
+  showMyBooks.value = !showMyBooks.value;
+  applyFilters();
+};
+
 // Reset all filters
 const resetFilters = () => {
   selectedAvailability.value = "all";
   selectedAgeGroup.value = "all";
   showNewArrivals.value = false;
+  showMyBooks.value = false;
   applyFilters();
 };
 
@@ -143,5 +180,16 @@ watch(
     applyFilters();
   },
   { deep: true },
+);
+
+// Watch for changes in userId
+watch(
+  () => userId.value,
+  () => {
+    if (!userId.value) {
+      showMyBooks.value = false;
+    }
+    applyFilters();
+  },
 );
 </script>
