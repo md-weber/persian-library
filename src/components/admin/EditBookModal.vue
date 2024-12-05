@@ -116,6 +116,16 @@
                   @change="handleImageUpload"
                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 />
+                <div
+                  v-if="uploadProgress > 0 && uploadProgress < 100"
+                  class="text-sm text-gray-500"
+                >
+                  {{
+                    $t("admin.addBook.form.uploadProgress", {
+                      progress: uploadProgress,
+                    })
+                  }}
+                </div>
                 <div v-if="editedBook.coverImage" class="h-20 w-20">
                   <img
                     :src="editedBook.coverImage"
@@ -148,10 +158,14 @@
             </button>
             <button
               type="submit"
-              :disabled="isUpdating"
+              :disabled="isUpdating || isUploading"
               class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md disabled:opacity-50"
             >
-              {{ $t("common.save") }}
+              {{
+                isUploading
+                  ? $t("admin.editBook.waitForUpload")
+                  : $t("common.save")
+              }}
             </button>
           </div>
         </form>
@@ -166,6 +180,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/repositories/firebase";
 import { useI18n } from "vue-i18n";
 import { useUsers } from "@/composables/useUsers";
+import { useBookForm } from "@/composables/useBookForm";
 import { convertNumbers, validateAgeInput } from "@/utils/numberConverter";
 
 const { t } = useI18n();
@@ -182,6 +197,9 @@ const props = defineProps({
 const emit = defineEmits(["close", "update:book"]);
 const editedBook = ref({});
 const isUpdating = ref(false);
+
+const { uploadProgress, isUploading, handleImageUpload } =
+  useBookForm(editedBook);
 
 // Watch for changes in the book prop
 watch(
@@ -220,6 +238,11 @@ const normalizeAgeInput = () => {
 };
 
 const handleSubmit = async () => {
+  if (isUploading.value) {
+    alert(t("admin.editBook.waitForUpload"));
+    return;
+  }
+
   try {
     isUpdating.value = true;
     const bookRef = doc(db, "books", editedBook.value.id);

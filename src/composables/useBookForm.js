@@ -8,23 +8,29 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 
-export function useBookForm() {
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export function useBookForm(initialBook = null) {
   const { t } = useI18n();
-  const newBook = ref({
-    title: "",
-    author: "",
-    translator: "",
-    illustrator: "",
-    age: "",
-    description: "",
-    coverImage: "",
-    isAvailable: true,
-    ownerId: "", // Change from owner to ownerId
-    borrowerId: null,
-  });
+  const book = ref(
+    initialBook || {
+      title: "",
+      author: "",
+      translator: "",
+      illustrator: "",
+      age: "",
+      description: "",
+      coverImage: "",
+      isAvailable: true,
+      ownerId: "",
+      borrowerId: null,
+    },
+  );
 
   const uploadProgress = ref(0);
-  const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+  const isUploading = computed(() => {
+    return uploadProgress.value > 0 && uploadProgress.value < 100;
+  });
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -71,7 +77,7 @@ export function useBookForm() {
             );
 
             const downloadURL = await getDownloadURL(resizedFileRef);
-            newBook.value.coverImage = downloadURL;
+            book.value.coverImage = downloadURL;
             uploadProgress.value = 0;
           } catch (error) {
             console.error("Error getting resized image URL:", error);
@@ -88,13 +94,13 @@ export function useBookForm() {
   const handleSubmit = async () => {
     try {
       await addDoc(collection(db, "books"), {
-        ...newBook.value,
+        ...book.value,
         isAvailable: true,
         createdAt: new Date(),
       });
 
       // Reset form
-      newBook.value = {
+      book.value = {
         title: "",
         author: "",
         translator: "",
@@ -103,7 +109,7 @@ export function useBookForm() {
         description: "",
         coverImage: "",
         isAvailable: true,
-        ownerId: "", // Change this line
+        ownerId: "",
         borrowerId: null,
       };
 
@@ -114,12 +120,8 @@ export function useBookForm() {
     }
   };
 
-  const isUploading = computed(() => {
-    return uploadProgress.value > 0 && uploadProgress.value < 100;
-  });
-
   return {
-    newBook,
+    book,
     uploadProgress,
     isUploading,
     handleImageUpload,

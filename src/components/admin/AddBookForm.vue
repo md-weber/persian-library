@@ -4,11 +4,11 @@
     <form @submit.prevent="handleSubmit" class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700">{{
-            $t("admin.addBook.form.title")
-          }}</label>
+          <label class="block text-sm font-medium text-gray-700">
+            {{ $t("admin.addBook.form.title") }}
+          </label>
           <input
-            v-model="newBook.title"
+            v-model="book.title"
             type="text"
             required
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -20,7 +20,7 @@
             {{ $t("admin.addBook.form.owner") }}
           </label>
           <select
-            v-model="newBook.ownerId"
+            v-model="book.ownerId"
             required
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
@@ -36,7 +36,7 @@
             $t("admin.addBook.form.author")
           }}</label>
           <input
-            v-model="newBook.author"
+            v-model="book.author"
             type="text"
             required
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -48,7 +48,7 @@
             $t("admin.addBook.form.translator")
           }}</label>
           <input
-            v-model="newBook.translator"
+            v-model="book.translator"
             type="text"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
@@ -59,7 +59,7 @@
             $t("admin.addBook.form.illustrator")
           }}</label>
           <input
-            v-model="newBook.illustrator"
+            v-model="book.illustrator"
             type="text"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
@@ -98,9 +98,9 @@
                 })
               }}
             </div>
-            <div v-if="newBook.coverImage" class="h-20 w-20">
+            <div v-if="book.coverImage" class="h-20 w-20">
               <img
-                :src="newBook.coverImage"
+                :src="book.coverImage"
                 alt="Preview"
                 class="h-full w-full object-cover rounded-md"
               />
@@ -113,7 +113,7 @@
             $t("admin.addBook.form.description")
           }}</label>
           <textarea
-            v-model="newBook.description"
+            v-model="book.description"
             rows="3"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           ></textarea>
@@ -141,25 +141,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
 import { useBookForm } from "@/composables/useBookForm";
 import { useUsers } from "@/composables/useUsers";
+import { ref } from "vue";
 import { convertNumbers, validateAgeInput } from "@/utils/numberConverter";
+
+const { book, handleImageUpload, handleSubmit, uploadProgress, isUploading } =
+  useBookForm();
+const { users } = useUsers();
 
 const ageInput = ref("");
 
 const normalizeAgeInput = () => {
   const validInput = validateAgeInput(ageInput.value);
   ageInput.value = convertNumbers.toPersian(validInput);
-  newBook.value.age = ageInput.value;
+  book.value.age = ageInput.value;
 };
-
-const {
-  newBook,
-  handleImageUpload,
-  handleSubmit,
-  uploadProgress,
-  isUploading,
-} = useBookForm();
-const { users } = useUsers();
 </script>
