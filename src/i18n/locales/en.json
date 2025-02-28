@@ -15,18 +15,20 @@
   },
   "home": {
     "status": {
-      "available": "Available",
-      "currentlyBorrowed": "Currently Borrowed",
       "youBorrowed": "You borrowed this book",
       "pendingReturn": "Pending Return",
       "returnPending": "Return pending confirmation",
       "confirmReturn": "Waiting for your confirmation",
-      "waitingForOwner": "Waiting for owner confirmation"
+      "waitingForOwner": "Waiting for owner confirmation",
+      "available": "Available",
+      "currentlyBorrowed": "Currently Borrowed",
+      "youOwnThisBook": "You cannot borrow your own book"
     },
     "borrowBook": "Borrow Book",
     "returnBook": "Return Book",
     "receiveBook": "Confirm Return",
     "notAvailable": "Not Available",
+    "youAreTheOwner": "This is your book",
     "messages": {
       "returnSuccess": "Return request sent to owner",
       "receiveSuccess": "Book received successfully",

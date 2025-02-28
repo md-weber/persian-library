@@ -153,7 +153,8 @@
                 disabled
                 class="mt-3 w-full px-4 py-2 rounded-md text-sm font-medium text-white bg-gray-400 cursor-not-allowed"
               >
-                {{ $t("home.notAvailable") }}
+
+                {{ book.ownerId === authStore.user?.id ? $t("home.youAreTheOwner") : $t("home.notAvailable") }}
               </button>
             </div>
           </div>

@@ -2,7 +2,7 @@
   "filters": {
     "availability": "وضعیت موجودی",
     "all": "همه",
-    "available": "موجود",
+    "available": "موجود است",
     "borrowed": "امانت داده شده",
     "ageGroup": "رده سنی",
     "newArrivals": "تازه‌های کتابخانه",
@@ -19,7 +19,9 @@
       "pendingReturn": "در انتظار بازگشت",
       "returnPending": "در انتظار تایید بازگشت",
       "confirmReturn": "در انتظار تایید شما",
-      "waitingForOwner": "در انتظار تایید صاحب کتاب"
+      "waitingForOwner": "در انتظار تایید صاحب کتاب",
+      "available": "موجود است",
+      "currentlyBorrowed": "Currently Borrowed"
     },
     "messages": {
       "returnSuccess": "درخواست بازگشت برای صاحب کتاب ارسال شد",
@@ -36,6 +38,7 @@
     "bookAgeLabel": "رده سنی: {age}",
     "borrowBook": "امانت گرفتن کتاب",
     "notAvailable": "در دسترس نیست",
+    "youAreTheOwner": "این کتاب شماست",
     "noBooksFound": "کتابی با این مشخصات یافت نشد.",
     "enterYourNamePrompt": "لطفا نام خود را وارد کنید:"
   },
@@ -92,7 +95,7 @@
         "author": "نویسنده",
         "status": {
           "title": "وضعیت",
-          "available": "موجود",
+          "available": "موجود است",
           "borrowed": "امانت داده شده",
           "pendingReturn": "در انتظار بازگشت"
         },
@@ -100,7 +103,7 @@
         "returnRequestedAt": "درخواست بازگشت: {date}",
         "borrowedAt": "امانت گرفته شده در: {date}",
         "actions": "عملیات",
-        "available": "موجود",
+        "available": "موجود است",
         "borrowed": "امانت داده شده",
         "owner": "صاحب کتاب",
         "borrower": "امانت گیرنده",
